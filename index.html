@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="dark">
+<title>Кинотеатр «Лампа» — учебная бронь</title>
+<style>
+:root{--bg:#150c28;--sf:#221438;--sf2:#33224f;--bd:#4b3772;--tx:#f3eefc;--mu:#a999c7;--ac:#a02cff;--ac2:#fff;--glow:rgba(160,44,255,.55);--er:#ff9bb0;--ok:#7ee0a8;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;color:var(--tx);font:16px/1.45 system-ui,-apple-system,"Segoe UI",sans-serif;background:radial-gradient(900px 500px at 70% -10%,#3b1d72 0,transparent 60%),radial-gradient(700px 400px at 0 30%,#2a1250 0,transparent 60%),var(--bg);background-attachment:fixed}
+.wrap{max-width:1020px;margin:0 auto;padding:16px 16px 0}
+.eyebrow{color:var(--mu);font-size:.9rem}
+h1{font:800 clamp(1.7rem,5vw,2.4rem)/1.1 system-ui,sans-serif;margin:4px 0 12px}
+h2{font-size:1.05rem;margin:0 0 10px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}
+.chip{background:var(--sf2);border-radius:12px;padding:6px 14px;font-size:.92rem}.chip.hot{background:var(--ac);color:var(--ac2);box-shadow:0 6px 18px var(--glow)}
+.note{background:rgba(255,255,255,.05);border:1px dashed var(--bd);border-radius:12px;padding:8px 12px;margin:0 0 12px;color:var(--mu);font-size:.92rem}.note strong{color:var(--tx)}
+button,select,input{font:inherit;color:inherit}
+:focus-visible{outline:3px solid #fff;outline-offset:2px}
+.tabs{display:flex;gap:8px;margin-bottom:14px}
+.tab{border:0;background:var(--sf2);border-radius:14px;padding:10px 18px;cursor:pointer;min-height:44px}
+.tab[aria-selected=true]{background:var(--ac);color:var(--ac2);box-shadow:0 6px 18px var(--glow);font-weight:700}
+.panel{background:rgba(34,20,56,.85);border:1px solid var(--bd);border-radius:20px;padding:16px;margin-bottom:14px;backdrop-filter:blur(6px)}
+.sessions{display:flex;gap:10px;overflow-x:auto;padding:4px 2px 10px;scroll-snap-type:x proximity}
+.ses{flex:0 0 auto;scroll-snap-align:start;min-width:150px;text-align:left;border:2px solid transparent;background:var(--sf2);border-radius:16px;padding:10px 14px;cursor:pointer;display:flex;flex-direction:column;gap:2px;min-height:64px}
+.ses b{font-size:1.1rem}.ses small{color:var(--mu)}.ses em{font-style:normal;font-size:.75rem;align-self:flex-start;background:rgba(0,0,0,.3);padding:1px 8px;border-radius:8px}
+.ses[aria-pressed=true]{background:var(--ac);border-color:#fff;box-shadow:0 8px 22px var(--glow)}.ses[aria-pressed=true] small{color:#f1defe}
+.row{display:flex;flex-wrap:wrap;gap:12px;align-items:end}
+label{display:flex;flex-direction:column;gap:4px;font-size:.88rem;color:var(--mu)}
+select,input{padding:9px 12px;border:2px solid var(--bd);border-radius:12px;background:var(--bg);min-height:44px}
+.grid{display:grid;grid-template-columns:1.25fr 1fr;gap:14px}
+@media(max-width:780px){.grid{grid-template-columns:1fr}}
+.arc{height:46px;margin:0 6% 18px;border-top:4px solid #b66bff;border-radius:50% 50% 0 0/100% 100% 0 0;background:linear-gradient(#a02cff55,transparent);text-align:center;letter-spacing:.4em;font-size:.72rem;color:var(--mu);padding-top:14px;box-shadow:0 -10px 30px #a02cff40}
+.hall{display:grid;gap:8px;justify-content:center}
+.hrow{display:flex;gap:7px;align-items:center;justify-content:center}
+.rl{width:1.3rem;font-weight:700;color:var(--mu);text-align:center}
+.gap{width:18px}
+.seat{width:42px;height:42px;border-radius:50%;border:2px solid #7a63a8;background:#4a3a6b;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-direction:column;font-size:.7rem;line-height:1;padding:0;transition:transform .12s,box-shadow .12s}
+.seat b{font-size:.95rem}.seat:not(:disabled):hover{transform:scale(1.12)}
+.seat.sel{background:var(--ac);border:3px solid #fff;box-shadow:0 0 18px var(--glow);font-weight:700}
+.seat.occ{background:transparent;border:2px dashed #6b5a8e;color:#8978ad;cursor:not-allowed}
+.seat.hid{visibility:hidden}
+.legend{display:flex;flex-wrap:wrap;gap:16px;margin-top:16px;padding-top:12px;border-top:1px dashed var(--bd);font-size:.88rem}
+.legend span{display:flex;align-items:center;gap:8px}.legend .seat{width:26px;height:26px;font-size:.8rem;cursor:default}
+ul{list-style:none;margin:0;padding:0}
+.li{width:100%;text-align:left;display:flex;justify-content:space-between;gap:8px;border:2px solid transparent;background:var(--sf2);border-radius:14px;padding:9px 12px;margin-bottom:6px;cursor:pointer;min-height:44px;font-size:.93rem}
+.li:not(:disabled):hover{border-color:var(--ac)}
+.li.sel{background:var(--ac);border-color:#fff;font-weight:700;box-shadow:0 4px 14px var(--glow)}
+.li.occ{background:transparent;border:2px dashed #6b5a8e;color:#8978ad;cursor:not-allowed}
+.li.cur:not(.sel){border-color:#fff}
+.scroll{max-height:400px;overflow-y:auto;padding-right:4px}
+.card dl{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;margin:0}.card dt{color:var(--mu)}.card dd{margin:0;font-weight:600}
+.msg{margin-top:12px;padding:10px 12px;border-radius:12px;border:2px solid;font-weight:600}
+.msg.err{color:var(--er);border-color:var(--er)}.msg.ok{color:var(--ok);border-color:var(--ok)}
+.btn{border:0;border-radius:999px;background:var(--ac);color:var(--ac2);padding:12px 22px;cursor:pointer;min-height:48px;font-weight:700;box-shadow:0 8px 24px var(--glow)}
+.btn.ghost{background:var(--sf2);box-shadow:none}
+.bar{position:sticky;bottom:0;z-index:5;display:flex;justify-content:space-between;align-items:center;gap:12px;margin:0 -16px;padding:12px 16px calc(12px + env(safe-area-inset-bottom,0px));background:linear-gradient(transparent,var(--bg) 35%)}
+.price{background:var(--sf);border:1px solid var(--bd);border-radius:999px;padding:8px 20px;line-height:1.2}.price b{font-size:1.3rem}.price small{display:block;color:var(--mu)}
+.bk{background:var(--sf2);border-radius:16px;padding:14px;margin-bottom:10px;display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px;align-items:center}
+.bk.flash{animation:fl 1.2s}@keyframes fl{from{box-shadow:0 0 0 3px var(--ac),0 0 24px var(--glow)}}
+footer{color:var(--mu);font-size:.85rem;text-align:center;padding:6px 0 14px}
+.mapbox{position:relative;aspect-ratio:16/10;border-radius:18px;overflow:hidden;background:#1b1032;border:1px solid var(--bd)}
+.mapbox svg{position:absolute;inset:0;width:100%;height:100%}.mapbox path{vector-effect:non-scaling-stroke}
+#pins{position:absolute;inset:0}
+.pin{position:absolute;transform:translate(-50%,-100%);display:flex;flex-direction:column;align-items:center;gap:3px;background:none;border:0;cursor:pointer;color:var(--tx);padding:2px;min-width:44px;min-height:44px}
+.pin i{font-style:normal;display:grid;place-items:center;width:40px;height:40px;border-radius:50%;background:#4a3a6b;border:2px solid #9a85c8;font-size:1.1rem;box-shadow:0 4px 12px #0009;transition:transform .15s}
+.pin span{font-size:.72rem;background:#150c28dd;padding:1px 8px;border-radius:8px;white-space:nowrap}
+.pin:hover i{transform:scale(1.12)}
+.pin[aria-pressed=true] i{background:var(--ac);border:3px solid #fff;box-shadow:0 0 22px var(--glow);transform:scale(1.18);font-weight:700}
+.pin[aria-pressed=true] span{background:var(--ac);font-weight:700}
+.hint{color:var(--mu);font-size:.88rem;margin:8px 0 0}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="eyebrow">Кинотеатр «Лампа» · учебный проект</div>
+<h1 id="ttl">Выберите кинотеатр</h1>
+<div class="chips" id="meta"></div>
+<p class="note" role="note"><strong>Учебное демо: бронирования сохраняются только в этом браузере</strong></p>
+<div class="tabs" role="tablist">
+<button class="tab" role="tab" aria-selected="true" data-tab="book">Бронирование</button>
+<button class="tab" role="tab" aria-selected="false" data-tab="mine">Мои брони (<span id="cnt">0</span>)</button>
+</div>
+
+<section id="book">
+<div class="panel" id="maparea"><h2>1. Кинотеатр на карте</h2>
+<div class="grid"><div><div class="mapbox" role="group" aria-label="Схема города с кинотеатрами"><svg viewBox="0 0 100 62" preserveAspectRatio="none" aria-hidden="true"><path d="M-5 14C20 8 30 30 50 26S85 38 105 30V40C85 48 60 36 50 36S20 40-5 24Z" fill="#3a2a78" opacity=".75"/><rect x="62" y="4" width="24" height="13" rx="4" fill="#24604a" opacity=".5"/><circle cx="28" cy="52" r="9" fill="#24604a" opacity=".5"/><g stroke="#4a3a78" stroke-width="1" fill="none"><path d="M0 46L100 52"/><path d="M20 0L26 62"/><path d="M60 0L56 62"/><path d="M0 58L100 60"/><path d="M92 0L96 62"/></g><g stroke="#6b55a8" stroke-width="3" fill="none"><path d="M0 50L100 42"/><path d="M38 0L52 62"/><path d="M0 6L100 20"/><path d="M80 0L70 62"/></g></svg><div id="pins"></div></div><p class="hint">Нажмите на метку на карте или на кинотеатр в списке.</p></div>
+<ul id="clist"></ul></div></div>
+<div id="flow" hidden>
+<div class="panel"><h2>2. Сеанс и фильтры</h2><div class="sessions" id="sessions" role="group" aria-label="Сеансы"></div>
+<div class="row">
+<label>Зона зала<select id="fz"><option value="all">Все</option><option value="Передний">Передний (A–B)</option><option value="Центр">Центр (C)</option><option value="VIP">VIP (D)</option></select></label>
+<label>Цена места<select id="fp"><option value="0">Любая</option><option value="350">до 350 ₽</option><option value="450">до 450 ₽</option></select></label>
+<span id="found" aria-live="polite" style="color:var(--mu)"></span></div></div>
+<div class="grid">
+<div class="panel"><div class="arc">ЭКРАН</div><div class="hall" id="hall" role="group" aria-label="План зала"></div>
+<div class="legend"><span><i class="seat">○</i>свободно</span><span><i class="seat sel">✓</i>выбрано</span><span><i class="seat occ">✕</i>занято</span></div></div>
+<div class="panel"><h2>Список мест</h2><div class="scroll"><ul id="list"></ul></div></div>
+</div>
+<div class="grid">
+<div class="panel card"><h2>Карточка места</h2><div id="card"></div></div>
+<div class="panel"><h2>Оформление брони</h2>
+<div class="row" style="margin-bottom:10px">
+<label>Имя (для учебной брони)<input id="nm" maxlength="40" autocomplete="off"></label>
+<label>Тип билета<select id="tp"><option value="0">Взрослый</option><option value="20">Студенческий −20%</option><option value="30">Детский −30%</option></select></label></div>
+<div>Выбрано мест: <b id="n">0</b> <span id="chosen" style="color:var(--mu)"></span></div>
+<div id="msg" role="status" aria-live="polite"></div></div>
+</div>
+<div class="bar"><div class="price" aria-live="polite"><b><span id="sum">0</span> ₽</b><small id="seatsTxt">0 мест</small></div><button class="btn" id="go">Забронировать</button></div>
+</div>
+</section>
+
+<section id="mine" hidden><div class="panel"><h2>Мои брони</h2><div id="bks"></div></div></section>
+<footer>Учебное демо: бронирования сохраняются только в этом браузере</footer>
+</div>
+<script>
+const $=s=>document.querySelector(s);
+const SESS=[{id:1,film:"Дюна: Часть вторая",time:"Сегодня, 18:30",fmt:"3D",m:1,info:["Фантастика","16+","2 ч 46 мин"]},{id:2,film:"Паразиты",time:"Сегодня, 21:15",fmt:"2D",m:1.2,info:["Триллер","16+","2 ч 12 мин"]},{id:3,film:"Мой сосед Тоторо",time:"Завтра, 11:00",fmt:"2D",m:.8,info:["Анимация","0+","1 ч 26 мин"]},{id:4,film:"Интерстеллар",time:"Завтра, 19:00",fmt:"3D",m:1.5,info:["Фантастика","12+","2 ч 49 мин"]}];
+const ROWS=[["A",300,"Передний"],["B",350,"Передний"],["C",400,"Центр"],["D",500,"VIP"]];
+const SEATS=[];ROWS.forEach(([r,p,z],ri)=>{for(let k=1;k<=6;k++)SEATS.push({id:r+k,row:r,num:k,base:p,zone:z,idx:ri*6+k})});
+const KEY="cinema-demo-bookings";
+const CINEMAS=[{id:1,name:"«Лампа» Центр",short:"Центр",addr:"ул. Ратушная, 5",x:46,y:50,k:1,ids:[1,2,3]},{id:2,name:"«Лампа» Приморье",short:"Приморье",addr:"пр. Набережный, 18",x:20,y:30,k:.9,ids:[2,4]},{id:3,name:"«Лампа» Парк",short:"Парк",addr:"ул. Липовая, 33",x:76,y:34,k:1.1,ids:[1,3,4]},{id:4,name:"«Лампа» Южный",short:"Южный",addr:"ш. Южное, 90",x:62,y:88,k:.85,ids:[1,2,4]}];
+let bookings=[],sel=new Set(),cur=null,sid=1,cid=null;
+const cin=()=>CINEMAS.find(c=>c.id===cid);
+try{bookings=JSON.parse(localStorage.getItem(KEY)||"[]")}catch(e){bookings=[]}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(bookings))}catch(e){}}
+const sess=()=>SESS.find(s=>s.id===sid);
+const price=s=>Math.round(s.base*sess().m*cin().k/10)*10;
+function occupied(s){const q=sid+cid*3;return (s.idx*7+q*13+s.idx*s.idx*q)%5===0||bookings.some(b=>(b.cid||1)===cid&&b.sid===sid&&b.seats.includes(s.id))}
+const match=s=>{const z=$("#fz").value,p=+$("#fp").value;return(z==="all"||s.zone===z)&&(!p||price(s)<=p)};
+const stText=s=>occupied(s)?"занято":sel.has(s.id)?"выбрано":"свободно";
+function drawSessions(){
+ $("#sessions").innerHTML=SESS.filter(s=>cin().ids.includes(s.id)).map(s=>`<button class="ses" data-sid="${s.id}" aria-pressed="${s.id===sid}"><b>${s.time.split(", ")[1]}</b><small>${s.time.split(", ")[0]} · ${s.film}</small><em>${s.fmt}</em></button>`).join("");
+ $("#ttl").textContent=sess().film;
+ $("#meta").innerHTML=`<span class="chip hot">${sess().fmt}</span>`+sess().info.map(i=>`<span class="chip">${i}</span>`).join("")+`<span class="chip">${sess().time}</span><span class="chip">📍 ${cin().name}</span>`}
+function render(f){
+ if(cid===null){$("#cnt").textContent=bookings.length;return}
+ const vis=SEATS.filter(match);
+ $("#found").textContent="Найдено мест: "+vis.length+" из 24";
+ $("#hall").innerHTML=ROWS.map(([r])=>`<div class="hrow"><span class="rl">${r}</span>`+SEATS.filter(s=>s.row===r).map(s=>{
+  const o=occupied(s),c=sel.has(s.id);
+  return (s.num===4?`<span class="gap"></span>`:"")+`<button class="seat ${o?"occ":c?"sel":""} ${match(s)?"":"hid"}" data-src="m" data-id="${s.id}" ${o?"disabled":""} aria-pressed="${c}" aria-label="Ряд ${r}, место ${s.num}, ${price(s)} рублей, ${stText(s)}"><span aria-hidden="true">${o?"✕":c?"✓":"○"}</span><b>${s.num}</b></button>`}).join("")+`</div>`).join("");
+ $("#list").innerHTML=vis.length?vis.map(s=>{const o=occupied(s),c=sel.has(s.id);
+  return `<li><button class="li ${o?"occ":c?"sel":""} ${cur===s.id?"cur":""}" data-src="l" data-id="${s.id}" ${o?"disabled":""} aria-pressed="${c}"><span>Ряд ${s.row}, место ${s.num} · ${s.zone}</span><span>${price(s)} ₽ · ${o?"✕ занято":c?"✓ выбрано":"○ свободно"}</span></button></li>`}).join(""):`<li style="color:var(--mu)">Нет мест под выбранные фильтры</li>`;
+ card();sum();$("#cnt").textContent=bookings.length;
+ if(f)document.querySelector(`[data-src="${f.src}"][data-id="${f.id}"]`)?.focus();
+}
+function card(){const s=SEATS.find(x=>x.id===cur);
+ $("#card").innerHTML=s?`<dl><dt>Место</dt><dd>Ряд ${s.row}, №${s.num}</dd><dt>Зона</dt><dd>${s.zone}</dd><dt>Цена</dt><dd>${price(s)} ₽</dd><dt>Сеанс</dt><dd>${sess().film}, ${sess().time} (${sess().fmt})</dd><dt>Статус</dt><dd>${stText(s)}</dd></dl>`:`<p style="color:var(--mu);margin:0">Выберите место на плане или в списке.</p>`}
+function total(){const d=+$("#tp").value;return Math.round(SEATS.filter(s=>sel.has(s.id)).reduce((a,s)=>a+price(s),0)*(100-d)/100)}
+function sum(){$("#n").textContent=sel.size;$("#sum").textContent=total();$("#seatsTxt").textContent=sel.size+" "+(sel.size===1?"место":sel.size>1&&sel.size<5?"места":"мест");$("#chosen").textContent=sel.size?"("+[...sel].join(", ")+")":""}
+function msg(t,c){$("#msg").innerHTML=t?`<div class="msg ${c}">${t}</div>`:""}
+function pick(e){const b=e.target.closest("[data-id]");if(!b||b.disabled)return;
+ const id=b.dataset.id;cur=id;sel.has(id)?sel.delete(id):sel.add(id);msg("");render({src:b.dataset.src,id})}
+$("#hall").onclick=pick;$("#list").onclick=pick;
+$("#sessions").onclick=e=>{const b=e.target.closest("[data-sid]");if(!b)return;sid=+b.dataset.sid;sel.clear();cur=null;msg("");drawSessions();render();$(`[data-sid="${sid}"]`).focus()};
+["#fz","#fp"].forEach(i=>$(i).onchange=()=>render());
+$("#tp").onchange=sum;
+$("#go").onclick=()=>{
+ const name=$("#nm").value.trim();
+ if(!sel.size)return msg("Ошибка: выберите хотя бы одно место.","err");
+ if(name.length<2||!/[A-Za-zА-Яа-яЁё]/.test(name)){$("#nm").focus();return msg("Ошибка: введите имя (минимум 2 символа, с буквами).","err")}
+ const bad=SEATS.filter(s=>sel.has(s.id)&&occupied(s));
+ if(bad.length){bad.forEach(s=>sel.delete(s.id));render();return msg("Ошибка: некоторые места уже заняты и сняты с выбора.","err")}
+ const code="L-"+Date.now().toString(36).toUpperCase().slice(-5);
+ const b={code,cid,sid,seats:[...sel].sort(),name,disc:+$("#tp").value,total:total(),ts:Date.now()};
+ bookings.push(b);save();sel.clear();cur=null;$("#nm").value="";
+ render();msg(`Готово: бронь ${code} создана на сумму ${b.total} ₽. Смотрите «Мои брони».`,"ok");drawBks(code)};
+function drawBks(flash){
+ $("#bks").innerHTML=bookings.length?bookings.slice().reverse().map(b=>{const s=SESS.find(x=>x.id===b.sid);
+  return `<div class="bk ${b.code===flash?"flash":""}"><div><b>${b.code}</b> · ${s.film} (${s.fmt})<br>${(CINEMAS.find(c=>c.id===(b.cid||1))||CINEMAS[0]).name} · ${s.time} · места: ${b.seats.join(", ")}<br>${b.name} · ${b.total} ₽${b.disc?" (скидка "+b.disc+"%)":""}</div><button class="btn ghost" data-cancel="${b.code}">Отменить бронь</button></div>`}).join(""):`<p style="color:var(--mu)">Броней пока нет.</p>`}
+$("#bks").onclick=e=>{const c=e.target.dataset.cancel;if(!c)return;
+ bookings=bookings.filter(b=>b.code!==c);save();drawBks();render();
+ $("#bks").insertAdjacentHTML("afterbegin",`<div class="msg ok" role="status">Бронь ${c} отменена, места освобождены.</div>`)};
+document.querySelectorAll(".tab").forEach(t=>t.onclick=()=>{
+ document.querySelectorAll(".tab").forEach(x=>x.setAttribute("aria-selected",x===t));
+ $("#book").hidden=t.dataset.tab!=="book";$("#mine").hidden=t.dataset.tab!=="mine";
+ if(t.dataset.tab==="mine")drawBks()});
+function drawMap(f){
+ $("#pins").innerHTML=CINEMAS.map(c=>{const on=c.id===cid;return `<button class="pin" style="left:${c.x}%;top:${c.y}%" data-src="p" data-cid="${c.id}" aria-pressed="${on}" aria-label="${c.name}, ${c.addr}"><i aria-hidden="true">${on?"✓":"🎬"}</i><span>${c.short}</span></button>`}).join("");
+ $("#clist").innerHTML=CINEMAS.map(c=>{const on=c.id===cid;return `<li><button class="li ${on?"sel":""}" data-src="c" data-cid="${c.id}" aria-pressed="${on}"><span>${c.name}<br><small>${c.addr}</small></span><span>${on?"✓ выбран":"○ выбрать"}<br><small>сеансов: ${c.ids.length}</small></span></button></li>`}).join("");
+ if(f)document.querySelector(`[data-src="${f.src}"][data-cid="${f.id}"]`)?.focus({preventScroll:true})}
+$("#maparea").onclick=e=>{const b=e.target.closest("[data-cid]");if(!b)return;const n=+b.dataset.cid;
+ if(n!==cid){cid=n;sid=cin().ids[0];sel.clear();cur=null;msg("")}
+ $("#flow").hidden=false;drawMap({src:b.dataset.src,id:b.dataset.cid});drawSessions();render();$("#flow").scrollIntoView({behavior:"smooth",block:"start"})};
+drawMap();drawBks();$("#cnt").textContent=bookings.length;
+</script>
+</body>
+</html>
